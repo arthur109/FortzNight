@@ -294,15 +294,15 @@ var bricks = []
 var bullets = []
 var bulletImages = []
 var playerImages = []
-
+var grass = 0
 function setup() {
   noSmooth
-  var width = int(1000 / tile) * tile
+  var width = int(1050 / tile) * tile
   var height = int(600 / tile) * tile
   createCanvas(width, height)
   player1 = new Player(200, 200, 1)
   player2 = new Player(width - 200, 200, 2)
-  grid = twoDArray(int(width / tile), int(height / tile))
+  grid = twoDArray(int(width / tile), int(height / tile)-1)
 }
 
 function draw() {
@@ -325,10 +325,11 @@ function draw() {
   for (var i = 0; i < bullets.length; i++) {
     bullets[i].update()
   }
-  blendMode(DIFFERENCE)
-  fill(255)
-  rect(0,0,width/2,height)
-  blendMode(BLEND)
+  for(var x = 0; x<grid.length;x++){
+    image(grass,x*tile,(grid[0].length-1)*tile,tile,tile)
+  }
+  fill(0)
+  rect(0,(grid[0].length)*tile,width,tile)
 }
 
 function preload() {
@@ -342,6 +343,7 @@ function preload() {
   bricks[3] = loadImage("block2.png")
   bricks[2] = loadImage("block3.png")
   bricks[1] = loadImage("block4.png")
+  grass = loadImage("grass.png")
 }
 
 function controlls() {
