@@ -306,7 +306,7 @@ function setup() {
 }
 
 function draw() {
-  background(255)
+  background(0,0,255)
   fill(0)
   text(player1.ammo, 20, 20)
   text(player2.ammo, width - 20, 20)
