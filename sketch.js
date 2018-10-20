@@ -269,7 +269,11 @@ class Player {
   }
   display() {
     fill(255, 0, 0)
-    playerImages[this.playerId].position(this.xpos+5, this.ypos)
+    if(abs(this.yspeed) <= 1){
+    playerIdleImages[this.playerId].display(this.xpos, this.ypos-(tile-this.size))
+  }else{
+    image(playerInAirImages[this.playerId], this.xpos, this.ypos-(tile-this.size))
+  }
 
   }
   update() {
@@ -291,7 +295,8 @@ var ammos = []
 var bricks = []
 var bullets = []
 var bulletImages = []
-var playerImages = []
+var playerIdleImages = []
+var playerInAirImages = []
 var grass = 0
 var selectedCannonSize
 
@@ -337,8 +342,28 @@ function draw() {
 }
 
 function preload() {
-  playerImages[1] = createImg("player1.gif")
-  playerImages[2] = createImg("player2.gif")
+  playerIdleImages[1] = new AnimImage(
+    [
+      "players/player1/idle1.png",
+      "players/player1/idle2.png",
+      "players/player1/idle3.png",
+      "players/player1/idle4.png",
+      "players/player1/idle5.png"
+
+], 5)
+  playerIdleImages[2] = new AnimImage(
+    [
+      "players/player2/idle1.png",
+      "players/player2/idle2.png",
+      "players/player2/idle3.png",
+      "players/player2/idle4.png",
+      "players/player2/idle5.png"
+
+], 5)
+
+  playerInAirImages[1] = loadImage("player1-jump.png")
+  playerInAirImages[2] = loadImage("player1-jump.png")
+
   ammoImage = loadImage("ammo.png")
   bulletImages[1] = loadImage("bullet1.png")
   bulletImages[2] = loadImage("bullet2.png")
