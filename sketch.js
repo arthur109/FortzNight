@@ -272,7 +272,7 @@ class Player {
   }
   display() {
     fill(255, 0, 0)
-    if(abs(this.yspeed) <= 1){
+    if(abs(this.yspeed) <= 3){
     playerIdleImages[this.playerId].display(this.xpos, this.ypos-(tile-this.size))
   }else{
     image(playerInAirImages[this.playerId], this.xpos, this.ypos-(tile-this.size))
@@ -289,10 +289,8 @@ class Player {
     this.display()
     if(this.jumpingMovments.down == false){
       this.jumping = false
-      print("on the ground")
     }else{
       this.jumping = true
-      print("not")
     }
   }
 }
