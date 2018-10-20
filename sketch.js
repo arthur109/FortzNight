@@ -291,10 +291,8 @@ class Player {
     this.display()
     if(this.jumpingMovments.down == false){
       this.jumping = false
-      print("on the ground")
     }else{
       this.jumping = true
-      print("not")
     }
   }
 }
