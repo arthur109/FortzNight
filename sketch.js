@@ -384,15 +384,15 @@ function preload() {
   playerFallingImages[1] = loadImage("players/player1/falling.png")
   playerFallingImages[2] = loadImage("players/player2/falling.png")
 
-  ammoImage = loadImage("ammo.png")
-  bulletImages[1] = loadImage("bullet1.png")
-  bulletImages[2] = loadImage("bullet2.png")
-  bulletImages[3] = loadImage("bullet3.png")
-  bricks[4] = loadImage("block1.png")
-  bricks[3] = loadImage("block2.png")
-  bricks[2] = loadImage("block3.png")
-  bricks[1] = loadImage("block4.png")
-  grass = loadImage("grass.png")
+  ammoImage = loadImage("pixel-art/ammo.png")
+  bulletImages[1] = loadImage("pixel-art/bullets/bullet1.png")
+  bulletImages[2] = loadImage("pixel-art/bullets/bullet2.png")
+  bulletImages[3] = loadImage("pixel-art/bullets/bullet3.png")
+  bricks[4] = loadImage("pixel-art/blocks/block1.png")
+  bricks[3] = loadImage("pixel-art/blocks/block2.png")
+  bricks[2] = loadImage("pixel-art/blocks/block3.png")
+  bricks[1] = loadImage("pixel-art/blocks/block4.png")
+  grass = loadImage("pixel-art/grass.png")
 }
 
 function controlls() {
