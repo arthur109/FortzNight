@@ -15,12 +15,15 @@
 //   image[1]
 //   weight:0.05
 // },{
-//
+//   areaDamage:false,
+//   directDamage:true,
+//   directDamageAmount:0.5,
+//   ammoUsage:0.5,
+//   image[1],
+//   weight:0,
+//   rechargeTime:2
 // },{
-//
-// },{
-//
-// }]
+//]
 
 class Ammo {
   constructor(xpos) {
@@ -103,7 +106,6 @@ class Bullet {
         this.killYourself()
       }
     } else {
-      print(probe)
       this.killYourself()
     }
   }
@@ -113,11 +115,9 @@ class Bullet {
   }
   check() {
     if (pixelToIndex(this.xpos) == pixelToIndex(player1.xpos) && pixelToIndex(this.ypos) == pixelToIndex(player1.ypos)) {
-      print("hitPlayer1")
       player1.life -= this.size
       this.killYourself()
     } else if (pixelToIndex(this.xpos) == pixelToIndex(player2.xpos) && pixelToIndex(this.ypos) == pixelToIndex(player2.ypos)) {
-      print("hitPlayer2")
       player2.life -= this.size
       this.killYourself()
     }
@@ -177,7 +177,6 @@ class Turret {
     }
   }
   update() {
-    print(this.delayCount)
     this.delayCount = this.delayCount + 1
     // console.log("checking for Hijack")
     if (pixelToIndex(this.player.xpos) == this.xindex + this.playerOffset && pixelToIndex(this.player.ypos) == this.yindex) {
@@ -206,27 +205,23 @@ class Turret {
     } else if(this.CurrentlyHijacking){
       if (this.playerId == "player1") {
         player1RightMove = function() {
-          player1.xspeed = speed
+          player1RightMoveBackup()
         }
         player1UpMove = function() {
-          player1.yspeed = -jumpSpeed
+          player1player1UpMoveBackup()
         }
         player1DownMove = function() {
-          if (validiatePosition(player1.xpos + (tile / 2), player1.ypos - tile)) {
-            grid[int((player1.xpos + (tile / 2)) / tile)][int((player1.ypos - tile) / tile)] = new Brick(roundToTile(player1.xpos + (tile / 2)), roundToTile(player1.ypos - tile))
-          }
+          player1DownMoveBackup()
         }
       } else if (this.playerId == "player2") {
         player2LeftMove = function() {
-          player2.xspeed = -speed
+          player2LeftMoveBackup()
         }
         player2UpMove = function() {
-          player2.yspeed = -jumpSpeed
+          player2UpMoveBackup()
         }
         player2DownMove = function() {
-          if (validiatePosition(player2.xpos + (tile / 2), player2.ypos - tile)) {
-            grid[int((player2.xpos + (tile / 2)) / tile)][int((player2.ypos - tile) / tile)] = new Brick(roundToTile(player2.xpos + (tile / 2)), roundToTile(player2.ypos - tile))
-          }
+          player2DownMoveBackup()
         }
       }
       this.CurrentlyHijacking = false
@@ -251,9 +246,13 @@ class Player {
     this.size = tile * 0.8
     this.ammo = 10
     this.life = 10
+    this.jumping = false
+    this.jumpingMovments = collison(this.xpos, this.ypos, this.xspeeed,this.yspeed, 0, this.size, this.size)
   }
   // this.health = 3
-
+   jump() {
+     this.yspeed = -jumpSpeed
+   }
   move() {
     this.xspeed = this.xfriction * this.xspeed
     this.yspeed = this.yfriction * this.yspeed
@@ -276,8 +275,20 @@ class Player {
     image(playerImages[this.playerId], this.xpos, this.ypos, this.size, this.size)
   }
   update() {
+    if(this.yspeed >= 0){
+      this.jumpingMovments = collison(this.xpos, this.ypos, this.xspeed, this.yspeed, this.size, this.size)
+    }else{
+      this.jumpingMovments = collison(this.xpos, this.ypos, this.xspeed, -this.yspeed, this.size, this.size)
+    }
     this.move()
     this.display()
+    if(this.jumpingMovments.down == false){
+      this.jumping = false
+      print("on the ground")
+    }else{
+      this.jumping = true
+      print("not")
+    }
   }
 }
 
@@ -288,7 +299,7 @@ var gravity = 0.9
 var tile = 50
 var player1
 var player2
-var jumpSpeed = 3
+var jumpSpeed = 6
 var ammocount = 0
 var ammos = []
 var bricks = []
@@ -357,7 +368,10 @@ function controlls() {
     player1.xspeed = -speed
   }
   if (keyIsDown(87)) {
-    player1UpMove()
+    if(player1.jumping == false){
+      player1UpMove()
+      player1.jumping=true
+    }
   }
   if (keyIsDown(83)) {
     player1DownMove()
@@ -369,7 +383,10 @@ function controlls() {
     player2LeftMove()
   }
   if (keyIsDown(UP_ARROW)) {
-    player2UpMove()
+    if(player2.jumping == false){
+      player2UpMove()
+      player2.jumping = true
+    }
   }
   if (keyIsDown(DOWN_ARROW)) {
     player2DownMove()
@@ -454,54 +471,80 @@ function twoDArray(lenght, depth) {
 function collison(xcord, ycord, xspeed, yspeed, wd, ht, applyX, applyY) {
   movementsPossible = {
     x: false,
-    y: false
+    y: false,
+    up:false,
+    down:false,
+    right:false,
+    left:false
   }
   if (xspeed < 0) {
     if (validiatePosition(xcord + xspeed, ycord) && validiatePosition(xcord + xspeed, ycord + ht)) {
       movementsPossible.x = true
+      movementsPossible.left = true
     }
   } else if (xspeed > 0) {
     if (validiatePosition(xcord + xspeed + wd, ycord) && validiatePosition(xcord + xspeed + wd, ycord + ht)) {
       movementsPossible.x = true
+      movementsPossible.right = true
     }
   }
   if (yspeed < 0) {
     if (validiatePosition(xcord, ycord + yspeed) && validiatePosition(xcord + wd, ycord + yspeed)) {
       movementsPossible.y = true
+      movementsPossible.up = true
     }
   }
   if (yspeed > 0) {
     if (validiatePosition(xcord, ycord + yspeed + ht) && validiatePosition(xcord + ht, ycord + yspeed + ht)) {
       movementsPossible.y = true
+      movementsPossible.down = true
     }
   }
   return (movementsPossible)
 }
 
 
-player1RightMove = function() {
+player1RightMoveBackup = function() {
   player1.xspeed = speed
 }
-player1UpMove = function() {
-  player1.yspeed = -jumpSpeed
+player1RightMove = function(){
+  player1RightMoveBackup()
 }
-player1DownMove = function() {
+player1UpMoveBackup = function() {
+  player1.jump()
+}
+player1UpMove = function() {
+  player1UpMoveBackup()
+}
+player1DownMoveBackup = function() {
   if (validiatePosition(player1.xpos + (tile / 2), player1.ypos - tile)) {
     grid[int((player1.xpos + (tile / 2)) / tile)][int((player1.ypos - tile) / tile)] = new Brick(roundToTile(player1.xpos + (tile / 2)), roundToTile(player1.ypos - tile))
   }
 }
+player1DownMove = function() {
+  player1DownMoveBackup()
+}
 
 
-player2LeftMove = function() {
+player2LeftMoveBackup = function() {
   player2.xspeed = -speed
 }
-player2UpMove = function() {
-  player2.yspeed = -jumpSpeed
+player2LeftMove = function(){
+  player2LeftMoveBackup()
 }
-player2DownMove = function() {
+player2UpMoveBackup = function() {
+  player2.jump()
+}
+player2UpMove = function() {
+  player2UpMoveBackup()
+}
+player2DownMoveBackup = function() {
   if (validiatePosition(player2.xpos + (tile / 2), player2.ypos - tile)) {
     grid[int((player2.xpos + (tile / 2)) / tile)][int((player2.ypos - tile) / tile)] = new Brick(roundToTile(player2.xpos + (tile / 2)), roundToTile(player2.ypos - tile))
   }
+}
+player2DownMove = function() {
+  player2DownMoveBackup()
 }
 
 function pixelToIndex(pixel) {
