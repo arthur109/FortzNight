@@ -208,7 +208,7 @@ class Turret {
           player1RightMoveBackup()
         }
         player1UpMove = function() {
-          player1player1UpMoveBackup()
+          player1UpMoveBackup()
         }
         player1DownMove = function() {
           player1DownMoveBackup()
