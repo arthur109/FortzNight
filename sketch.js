@@ -375,7 +375,7 @@ function preload() {
 ], 5)
 
   playerInAirImages[1] = loadImage("player1-jump.png")
-  playerInAirImages[2] = loadImage("player1-jump.png")
+  playerInAirImages[2] = loadImage("player2-jump.png")
 
   ammoImage = loadImage("ammo.png")
   bulletImages[1] = loadImage("bullet1.png")
