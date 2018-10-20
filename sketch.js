@@ -84,11 +84,12 @@ class Bullet {
     this.xspeed = xspeed
     this.yspeed = yspeed
     this.yaccel = 0.1
-    if(this.size<1){
-      this.myImage =  bulletImages[1]
-    }else{
-    this.myImage = bulletImages[int(this.size)]
-  }
+    if (this.size < 1) {
+      this.myImage = bulletImages[1]
+    } else {
+      this.myImage = bulletImages[int(this.size)]
+    }
+    this.isDead = false
   }
   move() {
     this.yspeed += this.yaccel
@@ -103,7 +104,6 @@ class Bullet {
         this.killYourself()
       }
     } else {
-      print(probe)
       this.killYourself()
     }
   }
@@ -113,18 +113,15 @@ class Bullet {
   }
   check() {
     if (pixelToIndex(this.xpos) == pixelToIndex(player1.xpos) && pixelToIndex(this.ypos) == pixelToIndex(player1.ypos)) {
-      print("hitPlayer1")
       player1.life -= this.size
       this.killYourself()
     } else if (pixelToIndex(this.xpos) == pixelToIndex(player2.xpos) && pixelToIndex(this.ypos) == pixelToIndex(player2.ypos)) {
-      print("hitPlayer2")
       player2.life -= this.size
       this.killYourself()
     }
   }
   killYourself() {
-    var i = bullets.indexOf(this);
-    bullets.splice(i, 1);
+    this.isDead = true
   }
   update() {
     this.move()
@@ -133,7 +130,7 @@ class Bullet {
   }
 }
 class Turret {
-  constructor(xpos, ypos,size) {
+  constructor(xpos, ypos, size) {
     this.playerOffset = 0
     this.size = size
     if (xpos < width / 2) {
@@ -177,7 +174,6 @@ class Turret {
     }
   }
   update() {
-    print(this.delayCount)
     this.delayCount = this.delayCount + 1
     // console.log("checking for Hijack")
     if (pixelToIndex(this.player.xpos) == this.xindex + this.playerOffset && pixelToIndex(this.player.ypos) == this.yindex) {
@@ -203,7 +199,7 @@ class Turret {
         }
       }
       this.CurrentlyHijacking = true
-    } else if(this.CurrentlyHijacking){
+    } else if (this.CurrentlyHijacking) {
       if (this.playerId == "player1") {
         player1RightMove = function() {
           player1.xspeed = speed
@@ -273,7 +269,8 @@ class Player {
   }
   display() {
     fill(255, 0, 0)
-    image(playerImages[this.playerId], this.xpos, this.ypos, this.size, this.size)
+    playerImages[this.playerId].position(this.xpos+5, this.ypos)
+
   }
   update() {
     this.move()
@@ -297,6 +294,7 @@ var bulletImages = []
 var playerImages = []
 var grass = 0
 var selectedCannonSize
+
 function setup() {
   noSmooth
   var width = int(1050 / tile) * tile
@@ -304,12 +302,12 @@ function setup() {
   createCanvas(width, height)
   player1 = new Player(200, 200, 1)
   player2 = new Player(width - 200, 200, 2)
-  grid = twoDArray(int(width / tile), int(height / tile)-1)
+  grid = twoDArray(int(width / tile), int(height / tile) - 1)
 }
 
 function draw() {
-  background(0,255,0)
-  fill(0,100,0)
+  background(244, 255, 196)
+  fill(0, 100, 0)
   text(player1.ammo, 20, 20)
   text(player2.ammo, width - 20, 20)
   text(player1.life, 20, 40)
@@ -321,22 +319,26 @@ function draw() {
   if (frameCount % 500 == 0) {
     ammos.push(new Ammo(int(random(20, width - 20))))
   }
-  for (var i = 0; i < ammos.length; i++) {
+  for (var i = ammos.length - 1; i >= 0; i--) {
     ammos[i].update()
   }
   for (var i = 0; i < bullets.length; i++) {
-    bullets[i].update()
+      bullets[i].update()
+      if(bullets[i].isDead){
+        bullets.splice(i,1)
+        i = i-1
+      }
   }
-  for(var x = 0; x<grid.length;x++){
-    image(grass,x*tile,(grid[0].length-1)*tile,tile,tile)
+  for (var x = 0; x < grid.length; x++) {
+    image(grass, x * tile, (grid[0].length - 1) * tile, tile, tile)
   }
   fill(0)
-  rect(0,(grid[0].length)*tile,width,tile)
+  rect(0, (grid[0].length) * tile, width, tile)
 }
 
 function preload() {
-  playerImages[1] = loadImage("player2.png")
-  playerImages[2] = loadImage("player1.png")
+  playerImages[1] = createImg("player1.gif")
+  playerImages[2] = createImg("player2.gif")
   ammoImage = loadImage("ammo.png")
   bulletImages[1] = loadImage("bullet1.png")
   bulletImages[2] = loadImage("bullet2.png")
@@ -378,11 +380,11 @@ function controlls() {
     placeCannon = true
     selectedCannonSize = 0.5
   }
-  if(keyIsDown(86)){
+  if (keyIsDown(86)) {
     placeCannon = true
     selectedCannonSize = 1
   }
-  if(keyIsDown(66)){
+  if (keyIsDown(66)) {
     placeCannon = true
     selectedCannonSize = 1.5
   }
@@ -434,7 +436,7 @@ function mouseClicked() {
     //fill(138,43,226)
     //rect(int(mouseX/tile)*tile,int(mouseY/tile)*tile,tile*2,tile)
     //fill(255)
-    grid[pixelToIndex(mouseX)][pixelToIndex(mouseY)] = new Turret(roundToTile(mouseX), roundToTile(mouseY),selectedCannonSize)
+    grid[pixelToIndex(mouseX)][pixelToIndex(mouseY)] = new Turret(roundToTile(mouseX), roundToTile(mouseY), selectedCannonSize)
     placeCannon = false
   } else {
     //rect(int(mouseX/tile)*tile,int(mouseY/tile)*tile,tile,tile)
