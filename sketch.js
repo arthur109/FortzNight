@@ -133,8 +133,9 @@ class Bullet {
   }
 }
 class Turret {
-  constructor(xpos, ypos) {
+  constructor(xpos, ypos,size) {
     this.playerOffset = 0
+    this.size = size
     if (xpos < width / 2) {
       this.player = player1
       this.playerId = "player1"
@@ -171,7 +172,7 @@ class Turret {
   shoot() {
     if (this.delayCount > this.shootDelay) {
       var direction = angleToVector(this.angle, 1)
-      bullets.push(new Bullet(this.xpos + (direction[0] * tile), this.ypos + (direction[1] * tile), direction[0] * 10, direction[1] * 10, 0.5))
+      bullets.push(new Bullet(this.xpos + (direction[0] * tile), this.ypos + (direction[1] * tile), direction[0] * 10, direction[1] * 10, this.size))
       this.delayCount = 0
     }
   }
@@ -295,6 +296,7 @@ var bullets = []
 var bulletImages = []
 var playerImages = []
 var grass = 0
+var selectedCannonSize
 function setup() {
   noSmooth
   var width = int(1050 / tile) * tile
@@ -374,6 +376,15 @@ function controlls() {
   }
   if (keyIsDown(67)) {
     placeCannon = true
+    selectedCannonSize = 0.5
+  }
+  if(keyIsDown(86)){
+    placeCannon = true
+    selectedCannonSize = 1
+  }
+  if(keyIsDown(66)){
+    placeCannon = true
+    selectedCannonSize = 1.5
   }
 }
 
@@ -423,7 +434,7 @@ function mouseClicked() {
     //fill(138,43,226)
     //rect(int(mouseX/tile)*tile,int(mouseY/tile)*tile,tile*2,tile)
     //fill(255)
-    grid[pixelToIndex(mouseX)][pixelToIndex(mouseY)] = new Turret(roundToTile(mouseX), roundToTile(mouseY))
+    grid[pixelToIndex(mouseX)][pixelToIndex(mouseY)] = new Turret(roundToTile(mouseX), roundToTile(mouseY),selectedCannonSize)
     placeCannon = false
   } else {
     //rect(int(mouseX/tile)*tile,int(mouseY/tile)*tile,tile,tile)
