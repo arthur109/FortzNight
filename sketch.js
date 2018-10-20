@@ -272,10 +272,12 @@ class Player {
   }
   display() {
     fill(255, 0, 0)
-    if(abs(this.yspeed) <= 1){
-    playerIdleImages[this.playerId].display(this.xpos, this.ypos-(tile-this.size))
-  }else{
-    image(playerInAirImages[this.playerId], this.xpos, this.ypos-(tile-this.size))
+    if(this.yspeed <= -0.2){
+      image(playerJumpingImages[this.playerId], this.xpos, this.ypos-(tile-this.size))
+    }else if(this.yspeed >= 0.2){
+      image(playerFallingImages[this.playerId], this.xpos, this.ypos-(tile-this.size))
+    }else{
+      playerIdleImages[this.playerId].display(this.xpos, this.ypos-(tile-this.size))
   }
 
   }
@@ -311,7 +313,8 @@ var bricks = []
 var bullets = []
 var bulletImages = []
 var playerIdleImages = []
-var playerInAirImages = []
+var playerJumpingImages = []
+var playerFallingImages = []
 var grass = 0
 var selectedCannonSize
 
@@ -376,8 +379,11 @@ function preload() {
 
 ], 5)
 
-  playerInAirImages[1] = loadImage("player1-jump.png")
-  playerInAirImages[2] = loadImage("player1-jump.png")
+  playerJumpingImages[1] = loadImage("players/player1/jumping.png")
+  playerJumpingImages[2] = loadImage("players/player2/jumping.png")
+
+  playerFallingImages[1] = loadImage("players/player1/falling.png")
+  playerFallingImages[2] = loadImage("players/player2/falling.png")
 
   ammoImage = loadImage("ammo.png")
   bulletImages[1] = loadImage("bullet1.png")
