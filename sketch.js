@@ -272,13 +272,14 @@ class Player {
   }
   display() {
     fill(255, 0, 0)
-    if(this.yspeed <= -0.2){
-      image(playerJumpingImages[this.playerId], this.xpos, this.ypos-(tile-this.size))
-    }else if(this.yspeed >= 0.2){
-      image(playerFallingImages[this.playerId], this.xpos, this.ypos-(tile-this.size))
-    }else{
+    if(this.yspeed == 0){
       playerIdleImages[this.playerId].display(this.xpos, this.ypos-(tile-this.size))
-  }
+    }
+    else if(this.yspeed < 0){
+      image(playerJumpingImages[this.playerId], this.xpos, this.ypos-(tile-this.size))
+    }else if(this.yspeed > 0){
+      image(playerFallingImages[this.playerId], this.xpos, this.ypos-(tile-this.size))
+    }
 
   }
   update() {
