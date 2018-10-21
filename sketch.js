@@ -40,11 +40,14 @@ var bulletImages = []
 var playerIdleImages = []
 var playerJumpingImages = []
 var playerFallingImages = []
-var grass = 0
+var turretBase
+var turretGun
+
+var grass
 var selectedCannonSize
 
 function setup() {
-  noSmooth
+  noSmooth()
   var width = int(1050 / tile) * tile
   var height = int(600 / tile) * tile
   createCanvas(width, height)
@@ -103,6 +106,9 @@ function preload() {
       "players/player2/idle5.png"
 
 ], 5)
+
+  turretBase = loadImage("pixel-art/turrets/base.png")
+  turretGun = loadImage("pixel-art/turrets/gun.png")
 
   playerJumpingImages[1] = loadImage("players/player1/jumping.png")
   playerJumpingImages[2] = loadImage("players/player2/jumping.png")

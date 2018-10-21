@@ -12,12 +12,17 @@ class Player {
     this.size = tile * 0.8
     this.ammo = 10
     this.life = 10
+    this.canJump = true
     this.jumping = false
     this.jumpingMovments = collison(this.xpos, this.ypos, this.xspeeed,this.yspeed, 0, this.size, this.size)
   }
   // this.health = 3
    jump() {
+     print(this.canJump)
+     if(this.canJump){
      this.yspeed = -jumpSpeed
+     this.canJump = false
+   }
    }
   move() {
     this.xspeed = this.xfriction * this.xspeed
@@ -48,18 +53,11 @@ class Player {
     }
 
   }
-  update() {
-    if(this.yspeed >= 0){
-      this.jumpingMovments = collison(this.xpos, this.ypos, this.xspeed, this.yspeed, this.size, this.size)
-    }else{
-      this.jumpingMovments = collison(this.xpos, this.ypos, this.xspeed, -this.yspeed, this.size, this.size)
-    }
+  update(){
     this.move()
     this.display()
-    if(this.jumpingMovments.down == false){
-      this.jumping = false
-    }else{
-      this.jumping = true
+    if(validiatePosition(this.xpos, this.ypos+tile) == false || validiatePosition(this.xpos+this.size, this.ypos+tile) == false ){
+      this.canJump = true
     }
   }
 }

@@ -50,10 +50,9 @@ function controlls() {
     player1.xspeed = -speed
   }
   if (keyIsDown(87)) {
-    if(player1.jumping == false){
+
       player1UpMove()
-      player1.jumping=true
-    }
+
   }
   if (keyIsDown(83)) {
     player1DownMove()
@@ -65,10 +64,9 @@ function controlls() {
     player2LeftMove()
   }
   if (keyIsDown(UP_ARROW)) {
-    if(player2.jumping == false){
+
       player2UpMove()
-      player2.jumping = true
-    }
+  
   }
   if (keyIsDown(DOWN_ARROW)) {
     player2DownMove()

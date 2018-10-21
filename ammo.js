@@ -7,7 +7,7 @@ class Ammo {
   }
   move() {
     this.yspeed = this.yspeed + this.accel
-    var temp = collison(this.xpos, this.ypos, 0, this.yspeed, tile * 0.75, tile * 0.75)
+    var temp = collison(this.xpos, this.ypos, 0, this.yspeed, tile * 0.4, tile * 0.6)
     if (temp.y) {
       this.ypos += this.yspeed
     } else {
@@ -16,7 +16,7 @@ class Ammo {
   }
   display() {
     fill(212, 175, 55)
-    image(ammoImage, this.xpos, this.ypos, tile * 0.75, tile * 0.75)
+    image(ammoImage, this.xpos, this.ypos, tile, tile)
   }
   check() {
     if (dist(this.xpos, this.ypos, player1.xpos, player1.ypos) <= tile) {

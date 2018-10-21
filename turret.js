@@ -25,14 +25,14 @@ class Turret {
   display() {
     this.update()
     fill(0, 0, 255, 100)
-    rect(this.xpos, this.ypos, tile, tile)
+    image(turretBase, this.xpos, this.ypos, tile, tile)
     fill(0, 255, 0)
     push()
-    rectMode(CENTER)
+    imageMode(CENTER)
     translate(this.xpos + tile / 2, this.ypos + tile / 2)
     rotate(radians(this.angle))
-    rect(tile / 3, 0, tile * 2, tile / 2)
-    rectMode(CORNER)
+    image(turretGun,tile / 3, 0, tile*2, tile)
+    imageMode(CORNER)
     pop()
   }
   shoot() {
