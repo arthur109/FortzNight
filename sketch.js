@@ -1,29 +1,4 @@
-// bulletInfo[
-//   {
-//   areaDamage:false,
-//   directDamage:true,
-//   directDamageAmount:0.5,
-//   ammoUsage:0.5,
-//   image[1],
-//   weight:0,
-//   rechargeTime:2
-// },{
-//   areaDamage:false,
-//   directDamage:true,
-//   directDamageAmount:2
-//   ammoUsage:0.5
-//   image[1]
-//   weight:0.05
-// },{
-//   areaDamage:false,
-//   directDamage:true,
-//   directDamageAmount:0.5,
-//   ammoUsage:0.5,
-//   image[1],
-//   weight:0,
-//   rechargeTime:2
-// },{
-//]
+
 
 var placeCannon = false
 var speed = 3

@@ -1,0 +1,10 @@
+bulletInfo[
+  {
+  areaDamage:false,
+  directDamage:true,
+  directDamageAmount:0.5,
+  ammoUsage:0.5,
+  image[1],
+  weight:0,
+  rechargeTime:2
+}]
